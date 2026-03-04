@@ -1,0 +1,164 @@
+# .semgrep.yml
+rules:
+  - id: python.no-eval-or-exec
+    message: "Avoid eval()/exec(). If you need dynamic behavior, use safe parsers or explicit dispatch tables."
+    severity: HIGH
+    languages: [python]
+    pattern-either:
+      - pattern: eval(...)
+      - pattern: exec(...)
+    paths:
+      exclude:
+        - "node_modules/**"
+        - "dist/**"
+        - "build/**"
+        - ".venv/**"
+        - "venv/**"
+        - "__pycache__/**"
+        - "vendor/**"
+        - "coverage/**"
+
+  - id: python.no-pickle-deserialization
+    message: "Avoid pickle.load(s) on untrusted data. Use JSON or another safe serialization format."
+    severity: HIGH
+    languages: [python]
+    pattern-either:
+      - pattern: pickle.load(...)
+      - pattern: pickle.loads(...)
+    paths:
+      exclude:
+        - "node_modules/**"
+        - "dist/**"
+        - "build/**"
+        - ".venv/**"
+        - "venv/**"
+        - "__pycache__/**"
+        - "vendor/**"
+        - "coverage/**"
+
+  - id: python.yaml-load-requires-safe-loader
+    message: "Avoid yaml.load() without a safe loader. Prefer yaml.safe_load() (or a safe Loader explicitly)."
+    severity: HIGH
+    languages: [python]
+    patterns:
+      - pattern: yaml.load(...)
+      - pattern-not: yaml.safe_load(...)
+    paths:
+      exclude:
+        - "node_modules/**"
+        - "dist/**"
+        - "build/**"
+        - ".venv/**"
+        - "venv/**"
+        - "__pycache__/**"
+        - "vendor/**"
+        - "coverage/**"
+
+  - id: python.subprocess-shell-true
+    message: "subprocess with shell=True is often command-injection prone. Prefer shell=False and pass args as a list."
+    severity: HIGH
+    languages: [python]
+    pattern-either:
+      - pattern: subprocess.run(..., shell=True, ...)
+      - pattern: subprocess.call(..., shell=True, ...)
+      - pattern: subprocess.check_call(..., shell=True, ...)
+      - pattern: subprocess.check_output(..., shell=True, ...)
+      - pattern: subprocess.Popen(..., shell=True, ...)
+    paths:
+      exclude:
+        - "node_modules/**"
+        - "dist/**"
+        - "build/**"
+        - ".venv/**"
+        - "venv/**"
+        - "__pycache__/**"
+        - "vendor/**"
+        - "coverage/**"
+
+  - id: python.sql-string-concat-in-execute
+    message: "Possible SQL injection: avoid building SQL with string concatenation/formatting. Use parameterized queries."
+    severity: MEDIUM
+    languages: [python]
+    pattern-either:
+      - pattern: $CURSOR.execute("..." + $X + "...")
+      - pattern: $CURSOR.execute(f"...{$X}...")
+      - pattern: $CURSOR.execute("..." % $X)
+      - pattern: $CURSOR.execute("...".format(...))
+    paths:
+      exclude:
+        - "node_modules/**"
+        - "dist/**"
+        - "build/**"
+        - ".venv/**"
+        - "venv/**"
+        - "__pycache__/**"
+        - "vendor/**"
+        - "coverage/**"
+
+  - id: js.no-eval-or-new-function
+    message: "Avoid eval() / new Function(). They are code-injection primitives."
+    severity: HIGH
+    languages: [javascript, typescript]
+    pattern-either:
+      - pattern: eval(...)
+      - pattern: new Function(...)
+    paths:
+      exclude:
+        - "node_modules/**"
+        - "dist/**"
+        - "build/**"
+        - "vendor/**"
+        - "coverage/**"
+
+  - id: js.child-process-exec
+    message: "child_process.exec/spawn with attacker-controlled input can lead to command injection. Validate input and avoid shell execution."
+    severity: HIGH
+    languages: [javascript, typescript]
+    pattern-either:
+      - pattern: require("child_process").exec(...)
+      - pattern: require("child_process").execSync(...)
+      - pattern: require("child_process").spawn(...)
+      - pattern: require("child_process").spawnSync(...)
+    paths:
+      exclude:
+        - "node_modules/**"
+        - "dist/**"
+        - "build/**"
+        - "vendor/**"
+        - "coverage/**"
+
+  - id: github-actions.unpinned-action-ref
+    message: "Pin GitHub Actions by SHA (preferred) or a version tag; avoid @main/@master/@HEAD."
+    severity: MEDIUM
+    languages: [generic]
+    pattern-regex: '(?m)^\s*uses:\s+[^\s@]+@[ \t]*(main|master|HEAD)\s*$'
+    paths:
+      include:
+        - ".github/workflows/*.yml"
+        - ".github/workflows/*.yaml"
+
+  - id: secrets.aws-access-key-id
+    message: "Possible AWS Access Key ID committed. Rotate if real, and move credentials to GitHub Secrets."
+    severity: HIGH
+    languages: [generic]
+    pattern-regex: '(?i)\bAKIA[0-9A-Z]{16}\b'
+    paths:
+      exclude:
+        - "node_modules/**"
+        - "dist/**"
+        - "build/**"
+        - "vendor/**"
+        - "coverage/**"
+
+  - id: secrets.private-key-block
+    message: "Private key material detected. Remove from repo and rotate/replace the key."
+    severity: CRITICAL
+    languages: [generic]
+    pattern-regex: '(?ms)-----BEGIN (RSA|DSA|EC|OPENSSH|PGP) PRIVATE KEY-----.*?-----END \1 PRIVATE KEY-----'
+    paths:
+      exclude:
+        - "node_modules/**"
+        - "dist/**"
+        - "build/**"
+        - "vendor/**"
+        - "coverage/**"
