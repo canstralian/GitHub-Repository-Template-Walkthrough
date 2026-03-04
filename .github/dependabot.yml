@@ -60,6 +60,10 @@ updates:
   #   commit-message:
   #     prefix: "deps"
   #     include: "scope"
+  #   groups:
+  #     pre-commit-minor-patch:
+  #       patterns: ["*"]
+  #       update-types: ["minor", "patch"]
 
   # 5) Dev containers (when you have .devcontainer/devcontainer.json)
   # - package-ecosystem: "devcontainers"
@@ -69,3 +73,11 @@ updates:
   #     day: "tuesday"
   #     time: "02:00"
   #     timezone: "Australia/Brisbane"
+  #   open-pull-requests-limit: 5
+  #   commit-message:
+  #     prefix: "deps"
+  #     include: "scope"
+  #   groups:
+  #     devcontainers-minor-patch:
+  #       patterns: ["*"]
+  #       update-types: ["minor", "patch"]
