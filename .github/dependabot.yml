@@ -1,0 +1,75 @@
+version: 2
+
+updates:
+  # 1) GitHub Actions (when you have .github/workflows/*.yml)
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "tuesday"
+      time: "02:00"
+      timezone: "Australia/Brisbane"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "deps"
+      include: "scope"
+
+  # 2) Node.js (when you have package.json + lockfile in /)
+  # - package-ecosystem: "npm"
+  #   directory: "/"
+  #   schedule:
+  #     interval: "weekly"
+  #     day: "tuesday"
+  #     time: "02:00"
+  #     timezone: "Australia/Brisbane"
+  #   open-pull-requests-limit: 5
+  #   commit-message:
+  #     prefix: "deps"
+  #     include: "scope"
+  #   groups:
+  #     npm-minor-patch:
+  #       patterns: ["*"]
+  #       update-types: ["minor", "patch"]
+
+  # 3) Python (when you have requirements.txt / pyproject.toml / poetry.lock in /)
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "tuesday"
+      time: "02:00"
+      timezone: "Australia/Brisbane"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "deps"
+      include: "scope"
+    groups:
+      pip-minor-patch:
+        patterns: ["*"]
+        update-types: ["minor", "patch"]
+
+  # 4) Pre-commit hooks (when you have .pre-commit-config.yaml in /)
+  # - package-ecosystem: "pre-commit"
+  #   directory: "/"
+  #   schedule:
+  #     interval: "weekly"
+  #     day: "tuesday"
+  #     time: "02:00"
+  #     timezone: "Australia/Brisbane"
+  #   open-pull-requests-limit: 5
+  #   commit-message:
+  #     prefix: "deps"
+  #     include: "scope"
+
+  # 5) Dev containers (when you have .devcontainer/devcontainer.json)
+  # - package-ecosystem: "devcontainers"
+  #   directory: "/"
+  #   schedule:
+  #     interval: "weekly"
+  #     day: "tuesday"
+  #     time: "02:00"
+  #     timezone: "Australia/Brisbane"
+  #   open-pull-requests-limit: 5
+  #   commit-message:
+  #     prefix: "deps"
+  #     include: "scope"
