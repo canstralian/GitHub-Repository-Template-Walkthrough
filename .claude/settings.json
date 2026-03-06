@@ -3,7 +3,8 @@
     "everything-claude-code": {
       "source": {
         "source": "github",
-        "repo": "affaan-m/everything-claude-code"
+        "repo": "affaan-m/everything-claude-code",
+        "tag": "v1.0.0"
       }
     }
   },
