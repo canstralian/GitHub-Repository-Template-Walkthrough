@@ -31,22 +31,23 @@ updates:
   #       patterns: ["*"]
   #       update-types: ["minor", "patch"]
 
-  Python (when you have requirements.txt / pyproject.toml / poetry.lock in /)
-   - package-ecosystem: "pip"
-     directory: "/"
-     schedule:
-       interval: "weekly"
-       day: "tuesday"
-       time: "02:00"
-       timezone: "Australia/Brisbane"
-     open-pull-requests-limit: 5
-     commit-message:
-       prefix: "deps"
-       include: "scope"
-     groups:
-       pip-minor-patch:
-         patterns: ["*"]
-         update-types: ["minor", "patch"]
+  # 3) Python (when you have requirements.txt / pyproject.toml / poetry.lock in /)
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "tuesday"
+      time: "02:00"
+      timezone: "Australia/Brisbane"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "deps"
+      include: "scope"
+    groups:
+      pip-minor-patch:
+        patterns: ["*"]
+        update-types: ["minor", "patch"]
+
   # 4) Pre-commit hooks (when you have .pre-commit-config.yaml in /)
   # - package-ecosystem: "pre-commit"
   #   directory: "/"
