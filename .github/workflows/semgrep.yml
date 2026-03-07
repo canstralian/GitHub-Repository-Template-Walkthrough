@@ -1,0 +1,49 @@
+name: Semgrep (Multi-Language Security)
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  schedule:
+    # Scheduled mid-week scan for newly discovered vulnerability patterns
+    - cron: '32 8 * * 3'
+
+permissions:
+  contents: read
+
+jobs:
+  semgrep:
+    name: Semgrep Patterns Scan
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read       # Fetch code
+      security-events: write # Upload SARIF to Security Tab
+      actions: read        # Required for private repo status checks
+      
+    container:
+      # Using the official returntocorp image for the 2026 rule definitions
+      image: returntocorp/semgrep
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Run Semgrep
+        # Note: Using the official action with the latest 2026 stable commit
+        uses: returntocorp/semgrep-action@fcd5ab7459e8d91cb1777481980d1b18b4fc6735
+        with:
+          # Required: Get your token from https://semgrep.dev/manage/settings/tokens
+          publishToken: ${{ secrets.SEMGREP_APP_TOKEN }}
+          # Optional: Link to a specific Semgrep deployment ID
+          publishDeployment: ${{ secrets.SEMGREP_DEPLOYMENT_ID }}
+          # Generate SARIF for GitHub Code Scanning integration
+          generateSarif: "1"
+          # Optimization: Scan only changed files on PRs to save CI time
+          auditOn: push
+
+      - name: Upload SARIF file
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: semgrep.sarif
+        if: always() # Ensure results are uploaded even if vulnerabilities are found
