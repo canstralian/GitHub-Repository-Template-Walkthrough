@@ -44,7 +44,6 @@ jobs:
         uses: facebook/pysa-action@f46a63777e59268613bd6e2ff4e29f144ca9e88b
         with:
           repo-directory: './'
-          requirements-path: 'requirements.txt'
           # Automatically infer types where annotations are missing (crucial for older repos)
           infer-types: true
           # Use standard filters to reduce false positives in the Security Dashboard
