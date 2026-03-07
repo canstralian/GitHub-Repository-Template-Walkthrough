@@ -7,7 +7,7 @@ on:
   pull_request:
     branches: [ "main" ]
   schedule:
-    # Scheduled weekly scan to catch new CVEs in dependencies (2026 standard)
+    # Scheduled weekly run to rerun Pysa taint analysis and catch new findings from code or configuration changes
     - cron: '22 13 * * 6'
 
 permissions:
