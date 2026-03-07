@@ -1,0 +1,53 @@
+name: Pysa (Taint Analysis)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  schedule:
+    # Scheduled weekly scan to catch new CVEs in dependencies (2026 standard)
+    - cron: '22 13 * * 6'
+
+permissions:
+  contents: read
+
+jobs:
+  pysa:
+    name: Pysa Security Scan
+    permissions:
+      actions: read
+      contents: read
+      security-events: write # Required to populate the GitHub Security tab
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      - name: Run Pysa
+        uses: facebook/pysa-action@f46a63777e59268613bd6e2ff4e29f144ca9e88b
+        with:
+          repo-directory: './'
+          requirements-path: 'requirements.txt'
+          # Automatically infer types where annotations are missing (crucial for older repos)
+          infer-types: true
+          # Use standard filters to reduce false positives in the Security Dashboard
+          include-default-sapp-filters: true
+          # Enable if you want to fail the PR on any security finding
+          # fail-on-error: true
