@@ -36,9 +36,9 @@ jobs:
         with:
           path: |
             ~/.sonar
-          key: ${{ runner.os }}-sonar-${{ hashFiles('**/pom.xml', '**/build.gradle') }}
+          key: ${{ runner.os }}-sonar-${{ hashFiles('**/requirements.txt', '**/setup.py', '**/pyproject.toml') }}
           restore-keys: |
-            ${{ runner.os }}-sonar-${{ hashFiles('**/pom.xml', '**/build.gradle') }}
+            ${{ runner.os }}-sonar-${{ hashFiles('**/requirements.txt', '**/setup.py', '**/pyproject.toml') }}
             ${{ runner.os }}-sonar-
 
       - name: Run Analysis
