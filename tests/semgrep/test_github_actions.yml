@@ -1,0 +1,30 @@
+# Tests for the github-actions.unpinned-action-ref Semgrep rule
+#
+# Semgrep test format (generic language):
+#   # ruleid: <rule-id>   → next non-comment line MUST match (true positive)
+#   # ok: <rule-id>       → next non-comment line MUST NOT match (true negative)
+#
+# Run:  semgrep --test --config .semgrep.yml tests/semgrep/test_github_actions.yml
+
+jobs:
+  unpinned_examples:
+    steps:
+      # ruleid: github-actions.unpinned-action-ref
+      - uses: actions/checkout@main
+
+      # ruleid: github-actions.unpinned-action-ref
+      - uses: actions/setup-python@master
+
+      # ruleid: github-actions.unpinned-action-ref
+      - uses: some-org/some-action@HEAD
+
+  pinned_examples:
+    steps:
+      # ok: github-actions.unpinned-action-ref
+      - uses: actions/checkout@v4
+
+      # ok: github-actions.unpinned-action-ref
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+
+      # ok: github-actions.unpinned-action-ref
+      - uses: actions/setup-python@v5
