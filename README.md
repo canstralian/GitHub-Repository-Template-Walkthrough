@@ -36,47 +36,61 @@ Ensure you have the following installed before proceeding:
 
 **1. Clone the repository**
 ```bash
-git clone [https://github.com/your-org/your-repo.git](https://github.com/your-org/your-repo.git)
+git clone https://github.com/your-org/your-repo.git
 cd your-repo
 ```
-2. Environment Configuration
-Duplicate the example environment file and populate it with your local development keys.
-Note: The .gitignore prevents committing the .env file to protect secrets.
-cp .env.example .env
 
-3. Install Dependencies
+**2. Environment Configuration**
+
+Duplicate the example environment file and populate it with your local development keys.
+Note: The `.gitignore` prevents committing the `.env` file to protect secrets.
+```bash
+cp .env.example .env
+```
+
+**3. Install Dependencies**
+```bash
 # Example using npm
 npm install
 
 # Example using pip
 pip install -r requirements.txt
+```
 
-4. Initialize Pre-commit Hooks
+**4. Initialize Pre-commit Hooks**
+
 We use pre-commit hooks to enforce baseline code quality and prevent secret leakage before code hits the repository.
+```bash
 # Install pre-commit framework (if not installed globally)
 pip install pre-commit
 # Install the git hook scripts
 pre-commit install
+```
 
-⚔️ Security Testing (Purple Team)
+## ⚔️ Security Testing (Purple Team)
 As a Purple Team initiative, we run both defensive guardrails and offensive sweeps locally before pushing to the CI pipeline.
-Run Defensive Analysis (SAST)
+
+### Run Defensive Analysis (SAST)
+```bash
 # Scan local codebase for vulnerabilities and bad practices
 semgrep scan --config auto .
+```
 
-Run Local Offensive Sweep (DAST via ZAP)
+### Run Local Offensive Sweep (DAST via ZAP)
 Ensure your local server is running (e.g., on port 8080) before executing.
+```bash
 # Simulates an offensive scan against your running local instance
-docker run -t owasp/zap2docker-stable zap-baseline.py -t [http://host.docker.internal:8080](http://host.docker.internal:8080)
+docker run -t owasp/zap2docker-stable zap-baseline.py -t http://host.docker.internal:8080
+```
 
-📦 Deployment
+## 📦 Deployment
 Deployment is handled automatically via GitHub Actions when a Pull Request is merged into the main branch. Ensure all status checks (CodeQL, Semgrep, and unit tests) pass; branch protection rules are configured to prevent bypassing these checks.
-🤝 Contributing (Planning & Design)
- * Check out an issue from the Planning board.
- * Create a feature branch (git checkout -b feature/issue-123).
- * Document any architectural or threat model changes in the /docs folder.
- * Commit your changes and open a Pull Request against main.
- * Ensure all CI/CD Purple Team checks pass before requesting a review.
-<!-- end list -->
+
+## 🤝 Contributing (Planning & Design)
+* Check out an issue from the Planning board.
+* Create a feature branch (`git checkout -b feature/issue-123`).
+* Document any architectural or threat model changes in the `/docs` folder.
+* Commit your changes and open a Pull Request against `main`.
+* Ensure all CI/CD Purple Team checks pass before requesting a review.
 
 

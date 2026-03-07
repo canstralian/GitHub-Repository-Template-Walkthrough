@@ -42,7 +42,7 @@ rules:
     languages: [python]
     patterns:
       - pattern: yaml.load(...)
-      - pattern-not: yaml.safe_load(...)
+      - pattern-not: yaml.load(..., Loader=yaml.SafeLoader)
     paths:
       exclude:
         - "node_modules/**"
